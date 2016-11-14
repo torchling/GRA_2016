@@ -660,7 +660,7 @@ bool isCenterTriangle(triangle test_triangle)
 //New CDT Start
 /*------------------------------------------------------------------*/
 
-
+/*
 void swap_vertex(int number_a, int number_b)
 {
     vertex tmp;
@@ -724,7 +724,7 @@ void quick_sort_right_vPool(int start, int end) {
     quick_sort_right_vPool(below + 1, end);
 }
 
-void generate_ConstraintDelaunayTriangleEdges(int start, int end/*, edges of the G-graph*/ )
+void generate_ConstraintDelaunayTriangleEdges(int start, int end)//, edges of the G-graph )
 {
     std::vector< vertex >   left_vertex_pool ;      //.clear() in the end   ; ; CDT 09.30.2016
     std::vector< vertex >   right_vertex_pool ;     //.clear() in the end   ; ; CDT 09.30.2016
@@ -940,11 +940,11 @@ void ConstraintDelaunayTriangle()
     int points_start = 0;
     int points_end   = theSetOfInputPoint.size()-1;
     quick_sort_recursive_CDT(points_start, points_end);
-    generate_ConstraintDelaunayTriangleEdges(points_start, points_end /*, edges of the G-graph*/ );
+    generate_ConstraintDelaunayTriangleEdges(points_start, points_end );//, edges of the G-graph );
 
     transform_CDTEdges_to_CDT();
 }
-
+*/
 //New CDT Ends
 /*------------------------------------------------------------------*/
 
@@ -1873,6 +1873,46 @@ void printNoted()
     glEnd();
 }
 
+void printObsticle0()
+{
+    glBegin(GL_LINE_LOOP);
+        glVertex3f( 9.000000, -7.000000, 0.0 );
+        glVertex3f( 13.000000, 0.000000, 0.0 );
+        glVertex3f( 9.000000, 6.000000, 0.0 );
+        glVertex3f( -11.000000, 6.000000, 0.0  );
+        glVertex3f( -14.000000, 0.000000, 0.0  );
+        glVertex3f( -11.000000, -7.000000, 0.0 );
+    glEnd();
+}
+
+void printRobot0()
+{
+    //robot#0
+    glBegin(GL_LINE_LOOP);
+        glVertex3f( 15.000000, 4.000000, 0.0 );
+        glVertex3f( -3.000000, 4.000000, 0.0 );
+        glVertex3f( -3.000000, -4.000000, 0.0 );
+        glVertex3f( 15.000000, -4.000000, 0.0  );
+    glEnd();
+    glBegin(GL_LINE_LOOP);
+        glVertex3f( 7.000000, 4.000000, 0.0 );
+        glVertex3f( 11.000000, 4.000000, 0.0 );
+        glVertex3f( 11.000000, 8.000000, 0.0 );
+        glVertex3f( 7.000000, 8.000000, 0.0  );
+    glEnd();
+
+}
+
+void printRobot1()
+{
+    //robot#1
+    glBegin(GL_LINE_LOOP);
+        glVertex3f( -5.000000, -5.000000, 0.0 );
+        glVertex3f( 5.000000, -5.000000, 0.0 );
+        glVertex3f( 0.000000, 5.000000, 0.0 );
+    glEnd();
+}
+
 /* Callback function */
 //-------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -2061,10 +2101,10 @@ void teddy_test()
         theSetOfInputPoint.push_back(theSetOfMouse[i]);//keeping the strokes number under 100 will perform better
         //cout<<"test"<<"\n";
         }
-        //generateDelaunayTriangle();//Using CDT so don't need
-        ConstraintDelaunayTriangle();
-        //generateBoneLine();
-        //generateMesh();
+        generateDelaunayTriangle();//Using CDT so don't need
+        //ConstraintDelaunayTriangle();
+        generateBoneLine();
+        generateMesh();
         theSetOfInputPoint.clear();
 
         meshBeenMade=true;
@@ -2102,7 +2142,7 @@ static void display(void)
         printStroke();
     glPopMatrix();
     }
-/*//new CDT test
+
     glPushMatrix();
     	glColor3d(0,1,0);
         glTranslated(0.0,0.0,-50);
@@ -2157,12 +2197,20 @@ static void display(void)
         }
     glPopMatrix();
     }
-*/
+/*
     glPushMatrix();//new CDT test
         glTranslated(0.0,0.0,-30);
         glRotated(yRotated, 0, 1, 0);
         glRotated(zRotated, 1, 0, 0);
         printEdgePool();
+    glPopMatrix();
+*/
+    glPushMatrix();//GRA test
+        glTranslated(0.0,0.0,-30);
+        glRotated(yRotated, 0, 1, 0);
+        glRotated(zRotated, 1, 0, 0);
+        printObsticle();
+        printRobot();
     glPopMatrix();
 
     glutSwapBuffers();
