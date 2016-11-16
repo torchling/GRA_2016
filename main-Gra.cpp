@@ -19,6 +19,8 @@
 #include <iostream>
 #include <math.h>
 
+#define PI 3.14159265
+
 int Width = 640;
 int Height= 480;
 
@@ -90,7 +92,17 @@ bool draw_done = false;
 int yRotated = 0; 	//from cubeword
 int zRotated = 0;	//from cubeword
 
+
+//GRA variables-------------------------------------------
+
+short shift_x = 5;
 float ratioN1 = 25.0/128.0;
+/*
+struct polygon
+{
+    float vertex[6][2];
+}*/
+
 
 /* Shared function */
 //-------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -657,6 +669,23 @@ bool isCenterTriangle(triangle test_triangle)
     return false;
 }
 
+//GRA------------------------------------//
+vertex cnt_clockwise_a_vertex(float degree, vertex vtoR)
+{
+    // |cos -sin|*|x|
+    // |sin  cos| |y|
+    GLfloat newX = cos(degree * PI / 180.0) * vtoR.x - sin(degree * PI / 180.0) * vtoR.y ;
+    GLfloat newY = sin(degree * PI / 180.0) * vtoR.x + cos(degree * PI / 180.0) * vtoR.y ;
+    vtoR.x = newX;
+    vtoR.y = newY;
+
+    return vtoR;
+}
+
+void read_Data_GRA()
+{
+    ;
+}
 
 //New CDT Start
 /*------------------------------------------------------------------*/
@@ -1876,30 +1905,111 @@ void printNoted()
 
 void printObsticle0()
 {
-    glBegin(GL_LINE_LOOP);
-        glVertex3f( (9.000000+40.0-64.0)*ratioN1, (-7.000000+30.0-64.0)*ratioN1, 0.0 );
-        glVertex3f( (13.000000+40.0-64.0)*ratioN1, (0.000000+30.0-64.0)*ratioN1, 0.0 );
-        glVertex3f( (9.000000+40.0-64.0)*ratioN1, (6.000000+30.0-64.0)*ratioN1, 0.0 );
-        glVertex3f( (-11.000000+40.0-64.0)*ratioN1, (6.000000+30.0-64.0)*ratioN1, 0.0  );
-        glVertex3f( (-14.000000+40.0-64.0)*ratioN1, (0.000000+30.0-64.0)*ratioN1, 0.0  );
-        glVertex3f( (-11.000000+40.0-64.0)*ratioN1, (-7.000000+30.0-64.0)*ratioN1, 0.0 );
+    float obst0[8][2] = {{9.000000, -7.000000}, {13.000000, 0.000000}, {9.000000, 6.000000}, {-11.000000, 6.000000}
+                        , {-14.000000, 0.000000}, {-11.000000, -7.000000}, {11.000000, 8.000000}, {7.000000, 8.000000}};
+
+
+    vertex rtm;
+    for(int i=0; i<6; i++){
+        rtm.x = obst0[i][0];
+        rtm.y = obst0[i][1];
+        rtm.z = 0.0;
+        rtm = cnt_clockwise_a_vertex( 300, rtm );
+        obst0[i][0] = rtm.x;
+        obst0[i][1] = rtm.y;
+    }
+
+    glBegin(GL_POLYGON);
+        glVertex3f( (obst0[0][0]+40.0-64.0)*ratioN1, (obst0[0][1]+30.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (obst0[1][0]+40.0-64.0)*ratioN1, (obst0[1][1]+30.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (obst0[2][0]+40.0-64.0)*ratioN1, (obst0[2][1]+30.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (obst0[3][0]+40.0-64.0)*ratioN1, (obst0[3][1]+30.0-64.0)*ratioN1, 0.0  );
+        glVertex3f( (obst0[4][0]+40.0-64.0)*ratioN1, (obst0[4][1]+30.0-64.0)*ratioN1, 0.0  );
+        glVertex3f( (obst0[5][0]+40.0-64.0)*ratioN1, (obst0[5][1]+30.0-64.0)*ratioN1, 0.0 );
+    glEnd();
+}
+
+void printObsticle1()
+{
+    float obst1[8][2] = {{17.000000, 6.000000}, {-17.000000, 6.000000}, {-17.000000, -7.000000}, {25.000000, -7.000000}
+                        , {-14.000000, 0.000000}, {-11.000000, -7.000000}, {11.000000, 8.000000}, {7.000000, 8.000000}};
+
+
+    vertex rtm;
+    for(int i=0; i<4; i++){
+        rtm.x = obst1[i][0];
+        rtm.y = obst1[i][1];
+        rtm.z = 0.0;
+        rtm = cnt_clockwise_a_vertex( 3.75, rtm );
+        obst1[i][0] = rtm.x;
+        obst1[i][1] = rtm.y;
+    }
+
+    glBegin(GL_POLYGON);
+        glVertex3f( (obst1[0][0]+90.0-64.0)*ratioN1, (obst1[0][1]+51.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (obst1[1][0]+90.0-64.0)*ratioN1, (obst1[1][1]+51.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (obst1[2][0]+90.0-64.0)*ratioN1, (obst1[2][1]+51.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (obst1[3][0]+90.0-64.0)*ratioN1, (obst1[3][1]+51.0-64.0)*ratioN1, 0.0  );
+    glEnd();
+}
+
+void printObsticle2()
+{
+    float obst2[8][2] = {{9.000000, -3.000000}, {9.000000, 6.000000}, {-11.000000, 6.000000}, {-11.000000, -3.000000}
+                        , {1.000000, 6.000000}, {1.000000, 10.000000}, {-2.000000, 10.000000}, {-2.000000, 6.000000}};
+
+
+    vertex rtm;
+    for(int i=0; i<8; i++){
+        rtm.x = obst2[i][0];
+        rtm.y = obst2[i][1];
+        rtm.z = 0.0;
+        rtm = cnt_clockwise_a_vertex( 90, rtm );
+        obst2[i][0] = rtm.x;
+        obst2[i][1] = rtm.y;
+    }
+
+    glBegin(GL_POLYGON);
+        glVertex3f( (obst2[0][0]+56.0-64.0)*ratioN1, (obst2[0][1]+30.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (obst2[1][0]+56.0-64.0)*ratioN1, (obst2[1][1]+30.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (obst2[2][0]+56.0-64.0)*ratioN1, (obst2[2][1]+30.0-64.0)*ratioN1, 0.0  );
+        glVertex3f( (obst2[3][0]+56.0-64.0)*ratioN1, (obst2[3][1]+30.0-64.0)*ratioN1, 0.0 );
+    glEnd();
+    glBegin(GL_POLYGON);
+        glVertex3f( (obst2[4][0]+56.0-64.0)*ratioN1, (obst2[4][1]+30.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (obst2[5][0]+56.0-64.0)*ratioN1, (obst2[5][1]+30.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (obst2[6][0]+56.0-64.0)*ratioN1, (obst2[6][1]+30.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (obst2[7][0]+56.0-64.0)*ratioN1, (obst2[7][1]+30.0-64.0)*ratioN1, 0.0  );
     glEnd();
 }
 
 void printRobot0()
 {
     //robot#0
-    glBegin(GL_LINE_LOOP);
-        glVertex3f( (15.000000+64.0-64.0)*ratioN1, (4.000000+64.0-64.0)*ratioN1, 0.0 );
-        glVertex3f( (-3.000000+64.0-64.0)*ratioN1, (4.000000+64.0-64.0)*ratioN1, 0.0 );
-        glVertex3f( (-3.000000+64.0-64.0)*ratioN1, (-4.000000+64.0-64.0)*ratioN1, 0.0 );
-        glVertex3f( (15.000000+64.0-64.0)*ratioN1, (-4.000000+64.0-64.0)*ratioN1, 0.0  );
+    float robo0[8][2] = {{15.000000, 4.000000}, {-3.000000, 4.000000}, {-3.000000, -4.000000}, {15.000000, -4.000000}
+                        , {7.000000, 4.000000}, {11.000000, 4.000000}, {11.000000, 8.000000}, {7.000000, 8.000000}};
+
+    vertex rtm;
+    for(int i=0; i<8; i++){
+        rtm.x = robo0[i][0];
+        rtm.y = robo0[i][1];
+        rtm.z = 0.0;
+        rtm = cnt_clockwise_a_vertex( 90, rtm );
+        robo0[i][0] = rtm.x;
+        robo0[i][1] = rtm.y;
+    }
+
+    glBegin(GL_POLYGON);
+        glVertex3f( (robo0[0][0]+64.0-64.0)*ratioN1, (robo0[0][1]+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (robo0[1][0]+64.0-64.0)*ratioN1, (robo0[1][1]+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (robo0[2][0]+64.0-64.0)*ratioN1, (robo0[2][1]+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (robo0[3][0]+64.0-64.0)*ratioN1, (robo0[3][1]+64.0-64.0)*ratioN1, 0.0  );
     glEnd();
-    glBegin(GL_LINE_LOOP);
-        glVertex3f( (7.000000+64.0-64.0)*ratioN1, (4.000000+64.0-64.0)*ratioN1, 0.0 );
-        glVertex3f( (11.000000+64.0-64.0)*ratioN1, (4.000000+64.0-64.0)*ratioN1, 0.0 );
-        glVertex3f( (11.000000+64.0-64.0)*ratioN1, (8.000000+64.0-64.0)*ratioN1, 0.0 );
-        glVertex3f( (7.000000+64.0-64.0)*ratioN1, (8.000000+64.0-64.0)*ratioN1, 0.0  );
+    glBegin(GL_POLYGON);
+        glVertex3f( (robo0[4][0]+64.0-64.0)*ratioN1, (robo0[4][1]+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (robo0[5][0]+64.0-64.0)*ratioN1, (robo0[5][1]+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (robo0[6][0]+64.0-64.0)*ratioN1, (robo0[6][1]+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (robo0[7][0]+64.0-64.0)*ratioN1, (robo0[7][1]+64.0-64.0)*ratioN1, 0.0  );
     glEnd();
 
 }
@@ -1907,12 +2017,53 @@ void printRobot0()
 void printRobot1()
 {
     //robot#1
-    glBegin(GL_LINE_LOOP);
-        glVertex3f( (-5.000000+20.0-64.0)*ratioN1, (-5.000000+20.0-64.0)*ratioN1, 0.0 );
-        glVertex3f( (5.000000+20.0-64.0)*ratioN1, (-5.000000+20.0-64.0)*ratioN1, 0.0 );
-        glVertex3f( (0.000000+20.0-64.0)*ratioN1, (5.000000+20.0-64.0)*ratioN1, 0.0 );
+    float robo1[8][2] = {{-5.000000, -5.000000}, {5.000000, -5.000000}, {0.000000, 5.000000}, {15.000000, -4.000000}
+                        , {7.000000, 4.000000}, {11.000000, 4.000000}, {11.000000, 8.000000}, {7.000000, 8.000000}};
+
+    vertex rtm;
+    for(int i=0; i<3; i++){
+        rtm.x = robo1[i][0];
+        rtm.y = robo1[i][1];
+        rtm.z = 0.0;
+        rtm = cnt_clockwise_a_vertex( 90, rtm );
+        robo1[i][0] = rtm.x;
+        robo1[i][1] = rtm.y;
+    }
+
+    glBegin(GL_POLYGON);
+        glVertex3f( (robo1[0][0]+20.0-64.0)*ratioN1, (robo1[0][1]+20.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (robo1[1][0]+20.0-64.0)*ratioN1, (robo1[1][1]+20.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (robo1[2][0]+20.0-64.0)*ratioN1, (robo1[2][1]+20.0-64.0)*ratioN1, 0.0 );
     glEnd();
+}//-shift_x
+
+void printRobot0g()
+{
+    //robot#0
+    glBegin(GL_POLYGON);
+        glVertex3f( (15.000000+80.0-64.0)*ratioN1, (4.000000+80.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (-3.000000+80.0-64.0)*ratioN1, (4.000000+80.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (-3.000000+80.0-64.0)*ratioN1, (-4.000000+80.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (15.000000+80.0-64.0)*ratioN1, (-4.000000+80.0-64.0)*ratioN1, 0.0  );
+    glEnd();
+    glBegin(GL_POLYGON);
+        glVertex3f( (7.000000+80.0-64.0)*ratioN1, (4.000000+80.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (11.000000+80.0-64.0)*ratioN1, (4.000000+80.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (11.000000+80.0-64.0)*ratioN1, (8.000000+80.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (7.000000+80.0-64.0)*ratioN1, (8.000000+80.0-64.0)*ratioN1, 0.0  );
+    glEnd();
+
 }
+
+void printRobot1g()
+{
+    //robot#1
+    glBegin(GL_POLYGON);
+        glVertex3f( (-5.000000+30.0-64.0)*ratioN1, (-5.000000+100.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (5.000000+30.0-64.0)*ratioN1, (-5.000000+100.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (0.000000+30.0-64.0)*ratioN1, (5.000000+100.0-64.0)*ratioN1, 0.0 );
+    glEnd();
+}//-shift_x
 
 void printBorder()
 {
@@ -1922,6 +2073,28 @@ void printBorder()
         glVertex3f( 12.50, 12.50, 0.0 );
         glVertex3f( -12.50, 12.50, 0.0 );
     glEnd();
+}
+
+void printButton()
+{
+    for(int i=0; i<6; i++){
+        glBegin(GL_LINE_LOOP);
+            glVertex3f( -19.0, 8.7-i*4, 0.0 );
+            glVertex3f( -13.5, 8.7-i*4, 0.0 );
+            glVertex3f( -13.5, 11.7-i*4, 0.0 );
+            glVertex3f( -19.0, 11.7-i*4, 0.0 );
+        glEnd();
+    }
+
+    for(int i=0; i<6; i++){
+        glBegin(GL_LINE_LOOP);
+            glVertex3f( 13.5, 8.7-i*4, 0.0 );
+            glVertex3f( 19.0, 8.7-i*4, 0.0 );
+            glVertex3f( 19.0, 11.7-i*4, 0.0 );
+            glVertex3f( 13.5, 11.7-i*4, 0.0 );
+        glEnd();
+    }
+
 }
 
 /* Callback function */
@@ -2221,10 +2394,17 @@ static void display(void)
         glRotated(yRotated, 0, 1, 0);
         glRotated(zRotated, 1, 0, 0);
         printObsticle0();
+        printObsticle1();
+        printObsticle2();
+        glColor3d(0,0,1);
         printRobot0();
         printRobot1();
+        glColor3d(0,1,0);
+        printRobot0g();
+        printRobot1g();
         glColor3d(0,0,0);
         printBorder();
+        printButton();
     glPopMatrix();
 
     glutSwapBuffers();
@@ -2956,7 +3136,7 @@ int main(int argc, char *argv[])
     glutInitWindowPosition(500,100);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-    glutCreateWindow("Teddy Test");
+    glutCreateWindow("GRA_Final_104753038");
 
     glutReshapeFunc(resize);
     glutDisplayFunc(display);
