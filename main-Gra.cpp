@@ -90,6 +90,7 @@ bool draw_done = false;
 int yRotated = 0; 	//from cubeword
 int zRotated = 0;	//from cubeword
 
+float ratioN1 = 25.0/128.0;
 
 /* Shared function */
 //-------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -1876,12 +1877,12 @@ void printNoted()
 void printObsticle0()
 {
     glBegin(GL_LINE_LOOP);
-        glVertex3f( 9.000000, -7.000000, 0.0 );
-        glVertex3f( 13.000000, 0.000000, 0.0 );
-        glVertex3f( 9.000000, 6.000000, 0.0 );
-        glVertex3f( -11.000000, 6.000000, 0.0  );
-        glVertex3f( -14.000000, 0.000000, 0.0  );
-        glVertex3f( -11.000000, -7.000000, 0.0 );
+        glVertex3f( (9.000000+40.0-64.0)*ratioN1, (-7.000000+30.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (13.000000+40.0-64.0)*ratioN1, (0.000000+30.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (9.000000+40.0-64.0)*ratioN1, (6.000000+30.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (-11.000000+40.0-64.0)*ratioN1, (6.000000+30.0-64.0)*ratioN1, 0.0  );
+        glVertex3f( (-14.000000+40.0-64.0)*ratioN1, (0.000000+30.0-64.0)*ratioN1, 0.0  );
+        glVertex3f( (-11.000000+40.0-64.0)*ratioN1, (-7.000000+30.0-64.0)*ratioN1, 0.0 );
     glEnd();
 }
 
@@ -1889,16 +1890,16 @@ void printRobot0()
 {
     //robot#0
     glBegin(GL_LINE_LOOP);
-        glVertex3f( 15.000000, 4.000000, 0.0 );
-        glVertex3f( -3.000000, 4.000000, 0.0 );
-        glVertex3f( -3.000000, -4.000000, 0.0 );
-        glVertex3f( 15.000000, -4.000000, 0.0  );
+        glVertex3f( (15.000000+64.0-64.0)*ratioN1, (4.000000+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (-3.000000+64.0-64.0)*ratioN1, (4.000000+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (-3.000000+64.0-64.0)*ratioN1, (-4.000000+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (15.000000+64.0-64.0)*ratioN1, (-4.000000+64.0-64.0)*ratioN1, 0.0  );
     glEnd();
     glBegin(GL_LINE_LOOP);
-        glVertex3f( 7.000000, 4.000000, 0.0 );
-        glVertex3f( 11.000000, 4.000000, 0.0 );
-        glVertex3f( 11.000000, 8.000000, 0.0 );
-        glVertex3f( 7.000000, 8.000000, 0.0  );
+        glVertex3f( (7.000000+64.0-64.0)*ratioN1, (4.000000+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (11.000000+64.0-64.0)*ratioN1, (4.000000+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (11.000000+64.0-64.0)*ratioN1, (8.000000+64.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (7.000000+64.0-64.0)*ratioN1, (8.000000+64.0-64.0)*ratioN1, 0.0  );
     glEnd();
 
 }
@@ -1907,9 +1908,19 @@ void printRobot1()
 {
     //robot#1
     glBegin(GL_LINE_LOOP);
-        glVertex3f( -5.000000, -5.000000, 0.0 );
-        glVertex3f( 5.000000, -5.000000, 0.0 );
-        glVertex3f( 0.000000, 5.000000, 0.0 );
+        glVertex3f( (-5.000000+20.0-64.0)*ratioN1, (-5.000000+20.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (5.000000+20.0-64.0)*ratioN1, (-5.000000+20.0-64.0)*ratioN1, 0.0 );
+        glVertex3f( (0.000000+20.0-64.0)*ratioN1, (5.000000+20.0-64.0)*ratioN1, 0.0 );
+    glEnd();
+}
+
+void printBorder()
+{
+    glBegin(GL_LINE_LOOP);
+        glVertex3f( -12.50, -12.50, 0.0 );
+        glVertex3f( 12.50, -12.50, 0.0 );
+        glVertex3f( 12.50, 12.50, 0.0 );
+        glVertex3f( -12.50, 12.50, 0.0 );
     glEnd();
 }
 
@@ -2101,10 +2112,10 @@ void teddy_test()
         theSetOfInputPoint.push_back(theSetOfMouse[i]);//keeping the strokes number under 100 will perform better
         //cout<<"test"<<"\n";
         }
-        generateDelaunayTriangle();//Using CDT so don't need
-        //ConstraintDelaunayTriangle();
-        generateBoneLine();
-        generateMesh();
+        //generateDelaunayTriangle();//Using CDT so don't need
+            //ConstraintDelaunayTriangle();
+        //generateBoneLine();
+        //generateMesh();
         theSetOfInputPoint.clear();
 
         meshBeenMade=true;
@@ -2209,8 +2220,11 @@ static void display(void)
         glTranslated(0.0,0.0,-30);
         glRotated(yRotated, 0, 1, 0);
         glRotated(zRotated, 1, 0, 0);
-        printObsticle();
-        printRobot();
+        printObsticle0();
+        printRobot0();
+        printRobot1();
+        glColor3d(0,0,0);
+        printBorder();
     glPopMatrix();
 
     glutSwapBuffers();
