@@ -2288,6 +2288,7 @@ void evendistance2()
 
 void rout_bone_line()
 {
+    //make seed point
     float x = 0.0;
     float y = 0.0;
     vertex tmp;
@@ -2300,6 +2301,15 @@ void rout_bone_line()
             tmp.y = y;
             Seed_Pool.push_back(tmp);
         }
+    }
+
+    //make
+    
+    //..............find start and end
+    vertex start_point; 
+    vertex end_point;
+    for(int j=0; j<Seed_Pool.size(); j++){
+        ;
     }
 }
 
