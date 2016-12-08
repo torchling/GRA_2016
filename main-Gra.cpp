@@ -64,6 +64,9 @@ std::vector< edge > edge_sharp_Pool ;           //.stay                 ;;
 std::vector< vertex > sharp_bone_vPool ;        //.stay                 ;;
 
 
+std::vector< vertex > Seed_Pool ;              //.clear() when started ;; GRA
+
+
 /* Paremeters */
 //-------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -2067,7 +2070,7 @@ void printRobot1g()
 
 void printBorder()
 {
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_POLYGON);
         glVertex3f( -12.50, -12.50, 0.0 );
         glVertex3f( 12.50, -12.50, 0.0 );
         glVertex3f( 12.50, 12.50, 0.0 );
@@ -2097,6 +2100,16 @@ void printButton()
 
 }
 
+void printSeed()
+{
+    
+    for(int i=0; i<Seed_Pool.size(); i++){
+        glBegin(GL_POINTS);
+            glVertex3f( (Seed_Pool[i].x-64) * ratioN1, (Seed_Pool[i].y-64) * ratioN1, 1.0 );
+        glEnd();
+    }
+    
+}
 /* Callback function */
 //-------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -2273,6 +2286,23 @@ void evendistance2()
 /* glut function */
 //-------------------------------------------------------------------------------------------------------------------------------------------------//
 
+void rout_bone_line()
+{
+    float x = 0.0;
+    float y = 0.0;
+    vertex tmp;
+    tmp.z = 0.0;
+    for(int i=7; i<121; i=i+8){
+        for(int j=7; j<121; j+=8){
+            x = i;
+            y = j;
+            tmp.x = x;
+            tmp.y = y;
+            Seed_Pool.push_back(tmp);
+        }
+    }
+}
+
 void teddy_test()
 {
     int jump = 2;
@@ -2405,6 +2435,8 @@ static void display(void)
         glColor3d(0,0,0);
         printBorder();
         printButton();
+        glColor3d(1,0,0);
+        printSeed();
     glPopMatrix();
 
     glutSwapBuffers();
@@ -3130,6 +3162,7 @@ const GLfloat high_shininess[] = { 100.0f };
 int main(int argc, char *argv[])
 {
     teddy_test();//drawFlatTriangleBase() all, not only FlatTriangleBase
+    rout_bone_line();
 
     glutInit(&argc, argv);
     glutInitWindowSize(Width,Height);
